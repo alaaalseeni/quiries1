@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة العمل — إمتثال</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--sbw:260px;--bg:#f0f2f7;--sbbg:#0d1527;--card:#fff;--text:#1a1f36;--t2:#6b7280;--bd:#e3e6ee;--ac:#3b72d9;--ac2:#7c5cbf;--grn:#10a760;--org:#e07a18;--red:#d93a52;--cbg:#0f1729;--ct:#c9d4e8;--ckw:#c084fc;--cstr:#6ee7b7;--cfn:#60a5fa;--ccm:#4a5568;--cnum:#fbbf24;--sh:0 1px 8px rgba(0,0,0,.05);--r:12px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Noto Sans Arabic',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}button,select,input,textarea{font-family:inherit}
+
+.sb{width:var(--sbw);min-height:100vh;background:var(--sbbg);position:fixed;right:0;top:0;z-index:50;display:flex;flex-direction:column;transition:transform .3s;box-shadow:-4px 0 24px rgba(0,0,0,.2)}
+.sb-hd{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.06)}.sb-logo{display:flex;align-items:center;gap:11px}.sb-ic{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#3b72d9,#7c5cbf);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:800}.sb-hd h2{color:#fff;font-size:15px;font-weight:800}.sb-hd p{color:rgba(255,255,255,.35);font-size:10.5px;margin-top:2px}
+.sb-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}.sb-lbl{color:rgba(255,255,255,.22);font-size:10px;font-weight:700;padding:12px 12px 5px;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between}
+.sb-lbl button{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);width:20px;height:20px;border-radius:5px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:.15s}.sb-lbl button:hover{background:rgba(255,255,255,.15);color:#fff}
+.si{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;color:rgba(255,255,255,.5);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:right}.si:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}.si.on{background:rgba(96,165,250,.15);color:#60a5fa}.si .ic{font-size:17px;width:22px;text-align:center}.si .bg{margin-right:auto;background:rgba(96,165,250,.18);color:#60a5fa;font-size:9.5px;padding:2px 8px;border-radius:9px;font-weight:700}
+.si-user{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:9px;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:600;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:right;position:relative}.si-user:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}.si-user.on{background:rgba(124,92,191,.2);color:#c4b5fd}.si-user .av{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}.si-user .uname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.si-user .ubg{margin-right:auto;font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;background:rgba(124,92,191,.2);color:#c4b5fd}.si-user .del-u{opacity:0;transition:.15s;font-size:11px;width:20px;height:20px;border-radius:5px;background:rgba(217,58,82,.15);color:#f87171;display:flex;align-items:center;justify-content:center;flex-shrink:0}.si-user:hover .del-u{opacity:1}.si-user .del-u:hover{background:rgba(217,58,82,.35)!important}
+.sb-ft{padding:14px 16px;border-top:1px solid rgba(255,255,255,.06)}.sb-ft p{color:rgba(255,255,255,.2);font-size:9.5px;text-align:center}
+.mt{display:none;position:fixed;top:12px;right:12px;z-index:60;width:40px;height:40px;border-radius:9px;border:none;background:var(--sbbg);color:#fff;font-size:18px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.3);align-items:center;justify-content:center}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:45}
+
+.mc{margin-right:var(--sbw);flex:1;min-height:100vh;display:flex;flex-direction:column}.ph{background:var(--card);border-bottom:1px solid var(--bd);padding:18px 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20;flex-wrap:wrap}.ph h1{font-size:18px;font-weight:800}.ph p{font-size:12px;color:var(--t2);margin-top:2px}.pb{padding:22px 24px;flex:1}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--card);font-size:12px;font-weight:600;color:var(--t2);cursor:pointer;transition:.15s}.btn:hover{background:var(--bg);color:var(--text)}.btn.ok{background:#ecfdf5;border-color:#a7f3d0;color:var(--grn)}.btn.ac{background:rgba(59,114,217,.06);border-color:rgba(59,114,217,.2);color:var(--ac)}.btn.dg{color:var(--red)}.btn.big{padding:10px 22px;font-size:13px;font-weight:700;border-radius:10px}.btn.pri{background:linear-gradient(135deg,#3b72d9,#2a5cb8);color:#fff;border:none;box-shadow:0 3px 14px rgba(59,114,217,.25)}.btn.gp{background:linear-gradient(135deg,#10a760,#0c8a4e);color:#fff;border:none;box-shadow:0 3px 14px rgba(16,167,96,.2)}
+.sbox{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:7px 13px;flex:1;max-width:300px}.sbox input{border:none;background:none;outline:none;font-size:12.5px;width:100%;color:var(--text)}
+
+/* Queries */
+.qg{display:flex;flex-direction:column;gap:16px}.qc{background:var(--card);border-radius:14px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh);transition:.2s}.qc:hover{box-shadow:0 3px 18px rgba(0,0,0,.07)}.qh{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);background:#fafbfd;flex-wrap:wrap;gap:8px}.qt{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.qt h3{font-size:14px;font-weight:700}.qtg{font-size:10px;padding:3px 9px;border-radius:6px;font-weight:700;background:rgba(59,114,217,.07);color:var(--ac)}
+.qcd{overflow-x:auto;max-height:380px;overflow-y:auto;background:var(--cbg)}.qcd pre{margin:0;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;color:var(--ct);direction:ltr;text-align:left;white-space:pre;tab-size:4}.qds{padding:10px 20px;font-size:11.5px;color:var(--t2);background:#fafbfd;display:flex;align-items:center;gap:7px}
+
+/* Modal */
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}.mod{background:var(--card);border-radius:18px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 16px 50px rgba(0,0,0,.2);padding:28px}.mod h2{font-size:17px;font-weight:800;margin-bottom:18px}.mod label{display:block;font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:5px;margin-top:14px}.mod input,.mod textarea{width:100%;padding:9px 14px;border:1px solid var(--bd);border-radius:9px;font-size:13px;background:var(--bg);color:var(--text);outline:none}.mod input:focus,.mod textarea:focus{border-color:var(--ac)}.mod textarea{min-height:200px;font-family:'JetBrains Mono',monospace;direction:ltr;text-align:left;line-height:1.7;resize:vertical}.mod-b{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+
+/* Add user modal */
+.au-mod{max-width:420px}.au-colors{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.au-color{width:32px;height:32px;border-radius:8px;cursor:pointer;border:3px solid transparent;transition:.15s}.au-color.sel{border-color:#fff;transform:scale(1.1)}
+
+/* User page header */
+.user-ph-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
+
+/* Code viewer */
+.cvt{display:flex;gap:4px;background:var(--card);border-radius:var(--r);padding:4px;border:1px solid var(--bd);margin-bottom:16px}.cvb{flex:1;padding:10px 14px;border-radius:9px;border:none;background:none;font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:7px}.cvb.on{background:var(--ac);color:#fff}.cvb:hover:not(.on){background:var(--bg)}
+.cvc{background:var(--card);border-radius:16px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh)}.cvh{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;background:#fafbfd;border-bottom:1px solid var(--bd)}.cvh h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}.cvlg{font-size:10px;padding:3px 10px;border-radius:6px;background:rgba(124,92,191,.08);color:var(--ac2);font-weight:700}
+.cvbd{overflow-x:auto;max-height:600px;overflow-y:auto;background:var(--cbg)}.cvbd pre{margin:0;padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;color:var(--ct);direction:ltr;text-align:left;white-space:pre;tab-size:4}.cvi{padding:10px 20px;font-size:11px;color:var(--t2);background:#fafbfd;border-top:1px solid var(--bd);display:flex;gap:16px}
+
+/* Comparison */
+.cmcs{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}.cmc{flex:1;min-width:250px;padding:30px 22px;border-radius:16px;border:2px solid var(--bd);background:var(--card);text-align:center;cursor:pointer;transition:.25s;box-shadow:var(--sh)}.cmc:hover{transform:translateY(-4px)}.cmc.camps:hover{border-color:var(--ac)}.cmc.housing:hover{border-color:var(--ac2)}.cmc .ico{font-size:34px;margin-bottom:10px}.cmc h3{font-size:17px;font-weight:800}.cmc p{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.7}
+.cmd{flex:1;min-width:230px;padding:28px 16px;border-radius:13px;border:2px dashed var(--bd);background:var(--card);text-align:center;cursor:pointer;transition:.2s}.cmd:hover,.cmd.drag{border-color:var(--ac);background:rgba(59,114,217,.02)}.cmd.done{border:2px solid var(--grn);background:rgba(16,167,96,.03)}.cmd .ico{font-size:26px;margin-bottom:5px}.cmd h4{font-size:13px;font-weight:700}.cmd p{font-size:11px;color:var(--t2);margin-top:3px}
+.cms{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:18px}.cmst{flex:1;min-width:145px;background:var(--card);border-radius:13px;padding:15px 18px;box-shadow:var(--sh);display:flex;align-items:center;gap:11px;border-right:4px solid}.cmst .sv{font-size:22px;font-weight:800}.cmst .sl{font-size:11px;color:var(--t2);margin-top:2px}
+.cmtb{display:flex;gap:4px;background:var(--card);border-radius:var(--r);padding:4px;border:1px solid var(--bd);flex-wrap:wrap;margin-bottom:14px}.cmtbb{flex:1;padding:9px 12px;border-radius:8px;border:none;background:none;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;transition:.15s;white-space:nowrap}.cmtbb.on{background:var(--ac);color:#fff}.cmtbb:hover:not(.on){background:var(--bg)}
+.cmpn{background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--bd);box-shadow:var(--sh)}.cmtw{overflow-x:auto;border-radius:9px;border:1px solid var(--bd)}.cmtw table{width:100%;border-collapse:collapse;font-size:11px}.cmtw th{padding:8px 12px;background:#152742;color:#fff;font-weight:700;white-space:nowrap;text-align:right}.cmtw td{padding:6px 12px;white-space:nowrap;border-bottom:1px solid var(--bd)}.cmtw tr:nth-child(even) td{background:var(--bg)}
+.cmch{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px}.cmch>div{flex:1;min-width:250px}.cmch h3{font-size:13px;font-weight:700;margin-bottom:6px}.cmch canvas{max-height:230px}
+.cmco{padding:13px 16px;border-radius:11px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.cmco:nth-child(odd){background:#f8f9fd}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:#1f2937;color:#fff;padding:11px 22px;border-radius:11px;font-size:12.5px;font-weight:600;z-index:200;box-shadow:0 8px 28px rgba(0,0,0,.2);opacity:0;transition:.3s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.lov{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:100;display:flex;align-items:center;justify-content:center}.lbox{background:var(--card);border-radius:16px;padding:32px 40px;text-align:center;box-shadow:0 16px 50px rgba(0,0,0,.15)}.spn{width:38px;height:38px;border:4px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:sp .7s linear infinite;margin:0 auto 12px}@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.fi{animation:fi .3s ease}.hid{display:none!important}
+@media(max-width:768px){.sb{transform:translateX(100%)}.sb.open{transform:translateX(0)}.so.open{display:block}.mt{display:flex}.mc{margin-right:0}.ph{padding:14px 14px}.pb{padding:14px 12px}}
+</style>
+</head>
+<body>
+<button class="mt" onclick="togSB()">☰</button><div class="so" id="sbOv" onclick="togSB()"></div>
+<nav class="sb" id="sb">
+<div class="sb-hd"><div class="sb-logo"><div class="sb-ic">إ</div><div><h2>إمتثال</h2><p>منصة العمل اليومية</p></div></div></div>
+<div class="sb-nav">
+  <div class="sb-lbl">الأدوات</div>
+  <button class="si on" data-p="queries" onclick="goP('queries')"><span class="ic">🗃️</span>الكويريز العامة<span class="bg" id="qBg">0</span></button>
+  <button class="si" data-p="codes" onclick="goP('codes')"><span class="ic">💻</span>الأكواد</button>
+  <div class="sb-lbl" style="margin-top:6px">البيانات</div>
+  <button class="si" data-p="comp" onclick="goP('comp')"><span class="ic">⇄</span>مقارنة البيانات</button>
+  <div class="sb-lbl" style="margin-top:8px">
+    <span>الأعضاء</span>
+    <button onclick="openAddUser()" title="إضافة عضو">+</button>
+  </div>
+  <div id="usersNav"></div>
+</div>
+<div class="sb-ft"><p>إمتثال v3.0</p></div>
+</nav>
+
+<div class="mc">
+<!-- QUERIES (عامة) -->
+<div id="p-queries">
+<div class="ph"><div style="flex:1"><h1>🗃️ الكويريز العامة</h1><p>الاستعلامات المشتركة لكل الفريق</p></div><div class="sbox"><span>🔍</span><input placeholder="ابحث..." oninput="fltQ(this.value)"></div><button class="btn ac big" onclick="openM(null)">➕ إضافة كويري</button></div>
+<div class="pb"><div class="qg" id="qG"></div></div>
+</div>
+<!-- CODES -->
+<div id="p-codes" class="hid">
+<div class="ph"><div style="flex:1"><h1>💻 الأكواد</h1><p>أكواد المخيمات والمساكن — للنسخ</p></div></div>
+<div class="pb fi"><div class="cvt"><button class="cvb on" id="ct0" onclick="cvS(0)">⛺ كود المخيمات</button><button class="cvb" id="ct1" onclick="cvS(1)">🏢 كود المساكن</button></div><div id="cvC"></div></div>
+</div>
+<!-- COMPARISON -->
+<div id="p-comp" class="hid">
+<div class="ph"><div style="flex:1"><h1>⇄ مقارنة البيانات</h1><p>مقارنة الوزارة والنظام</p></div><button class="btn dg hid" id="crB" onclick="cR()">✕ جديد</button></div>
+<div class="pb" id="cB"></div>
+</div>
+<!-- USER PAGE (dynamic) -->
+<div id="p-user" class="hid">
+<div class="ph" id="userPH"></div>
+<div class="pb"><div class="qg" id="userQG"></div></div>
+</div>
+</div>
+
+<!-- MODAL: كويري -->
+<div class="mov hid" id="aM"><div class="mod">
+<h2 id="mTitle">➕ إضافة كويري</h2>
+<label>اسم الكويري *</label><input id="mN" placeholder="مثال: Get_Active_Users">
+<label>التصنيف</label><input id="mT" placeholder="تقرير، استعلام...">
+<label>وصف مختصر</label><input id="mD" placeholder="وصف بسيط">
+<label>كود SQL *</label><textarea id="mS" placeholder="SELECT * FROM ..."></textarea>
+<div class="mod-b"><button class="btn big" onclick="closeM()">إلغاء</button><button class="btn big pri" onclick="saveQ()">💾 حفظ</button></div>
+</div></div>
+
+<!-- MODAL: إضافة عضو -->
+<div class="mov hid" id="auM"><div class="mod au-mod">
+<h2>👤 إضافة عضو جديد</h2>
+<label>الاسم *</label><input id="auN" placeholder="مثال: محمد العمري">
+<label>اختر لون</label>
+<div class="au-colors" id="auColors"></div>
+<div class="mod-b"><button class="btn big" onclick="closeAddUser()">إلغاء</button><button class="btn big pri" onclick="saveUser()">✅ إضافة</button></div>
+</div></div>
+
+<div class="toast" id="tst"></div>
+<div class="lov hid" id="lO"><div class="lbox"><div class="spn"></div><div style="font-weight:700;font-size:13px">جاري المقارنة...</div></div></div>
+
+<script>
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function tst(m){const e=document.getElementById('tst');e.innerHTML=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
+function togSB(){document.getElementById('sb').classList.toggle('open');document.getElementById('sbOv').classList.toggle('open')}
+
+// ═══ PAGES ═══
+const PAGES=['queries','codes','comp','user'];
+function goP(p,uid){
+  PAGES.forEach(x=>document.getElementById('p-'+x).classList.toggle('hid',x!==p));
+  document.querySelectorAll('.si[data-p]').forEach(el=>el.classList.toggle('on',el.dataset.p===p&&!uid));
+  document.querySelectorAll('.si-user').forEach(el=>el.classList.toggle('on',el.dataset.uid===uid));
+  if(p==='comp'&&!cS.result)cRM();
+  if(p==='codes')cvS(cvI);
+  if(p==='user'&&uid)renderUserPage(uid);
+  document.getElementById('sb').classList.remove('open');
+  document.getElementById('sbOv').classList.remove('open');
+}
+
+// ═══ USERS ═══
+const USER_COLORS=['#3b72d9','#7c5cbf','#10a760','#e07a18','#d93a52','#0891b2','#d97706','#6366f1','#db2777','#14b8a6'];
+let selColor=USER_COLORS[0];
+
+function loadUsers(){return JSON.parse(localStorage.getItem('im_users')||'[]')}
+function saveUsers(u){localStorage.setItem('im_users',JSON.stringify(u))}
+function loadUserQs(uid){return JSON.parse(localStorage.getItem('im_uq_'+uid)||'[]')}
+function saveUserQs(uid,qs){localStorage.setItem('im_uq_'+uid,JSON.stringify(qs));renderUsersNav()}
+
+function renderUsersNav(){
+  const users=loadUsers();
+  const nav=document.getElementById('usersNav');
+  nav.innerHTML=users.map(u=>{
+    const qs=loadUserQs(u.id);
+    const initials=u.name.trim().split(' ').map(w=>w[0]).slice(0,2).join('');
+    return `<div style="display:flex;align-items:center;gap:2px">
+      <button class="si-user" data-uid="${u.id}" onclick="goP('user','${u.id}')">
+        <div class="av" style="background:${u.color}">${initials}</div>
+        <span class="uname">${esc(u.name)}</span>
+        <span class="ubg">${qs.length}</span>
+      </button>
+      <button onclick="deleteUser('${u.id}')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.25);font-size:13px;padding:4px 6px;border-radius:6px;transition:.15s" onmouseover="this.style.color='#f87171'" onmouseout="this.style.color='rgba(255,255,255,.25)'" title="حذف العضو">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function openAddUser(){
+  const colors=document.getElementById('auColors');
+  colors.innerHTML=USER_COLORS.map((c,i)=>`<div class="au-color ${i===0?'sel':''}" style="background:${c}" onclick="pickColor('${c}',this)"></div>`).join('');
+  selColor=USER_COLORS[0];
+  document.getElementById('auN').value='';
+  document.getElementById('auM').classList.remove('hid');
+}
+function closeAddUser(){document.getElementById('auM').classList.add('hid')}
+function pickColor(c,el){selColor=c;document.querySelectorAll('.au-color').forEach(x=>x.classList.remove('sel'));el.classList.add('sel')}
+
+function saveUser(){
+  const name=document.getElementById('auN').value.trim();
+  if(!name){tst('⚠️ أدخل الاسم');return}
+  const users=loadUsers();
+  if(users.find(u=>u.name===name)){tst('⚠️ الاسم موجود مسبقاً');return}
+  const id='u'+Date.now();
+  users.push({id,name,color:selColor});
+  saveUsers(users);
+  renderUsersNav();
+  closeAddUser();
+  tst('✅ تمت إضافة '+name);
+}
+
+function deleteUser(uid){
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  if(!confirm('حذف "'+u.name+'" وجميع كويريزه؟'))return;
+  saveUsers(users.filter(x=>x.id!==uid));
+  localStorage.removeItem('im_uq_'+uid);
+  renderUsersNav();
+  goP('queries');
+  tst('🗑️ تم الحذف');
+}
+
+function renderUserPage(uid){
+  const users=loadUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u)return;
+  const qs=loadUserQs(uid);
+  const initials=u.name.trim().split(' ').map(w=>w[0]).slice(0,2).join('');
+  // Header
+  document.getElementById('userPH').innerHTML=`
+    <div class="user-ph-av" style="background:${u.color}">${initials}</div>
+    <div style="flex:1"><h1 style="font-size:18px;font-weight:800">${esc(u.name)}</h1><p>الكويريز الخاصة — ${qs.length} كويري</p></div>
+    <div class="sbox"><span>🔍</span><input placeholder="ابحث..." oninput="fltUQ(this.value,'${uid}')"></div>
+    <button class="btn ac big" onclick="openM('${uid}')">➕ إضافة كويري</button>`;
+  renderUserQs(uid,'');
+}
+
+function renderUserQs(uid,filter){
+  const qs=loadUserQs(uid);
+  const g=document.getElementById('userQG');
+  const fl=qs.filter(q=>!filter||q.name.toLowerCase().includes(filter.toLowerCase())||q.tag.includes(filter)||q.sql.toLowerCase().includes(filter.toLowerCase()));
+  if(!fl.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--t2)">لا توجد كويريز — أضف أول كويري لك 🚀</div>';return}
+  g.innerHTML=fl.map((q,i)=>{
+    const ri=qs.indexOf(q);
+    return`<div class="qc fi" style="animation-delay:${i*.05}s"><div class="qh"><div class="qt"><h3>${esc(q.name)}</h3><span class="qtg">${esc(q.tag||'SQL')}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="uq${uid}_${ri}" onclick="cpUQ('${uid}',${ri})">📋 نسخ</button><button class="btn" onclick="edUQ('${uid}',${ri})">✏️ تعديل</button><button class="btn dg" onclick="dlUQ('${uid}',${ri})">🗑️</button></div></div><div class="qcd"><pre>${hlS(q.sql)}</pre></div><div class="qds">💡 ${esc(q.desc||'—')}</div></div>`;
+  }).join('');
+}
+
+function fltUQ(v,uid){renderUserQs(uid,v)}
+
+function cpUQ(uid,i){
+  const qs=loadUserQs(uid);
+  navigator.clipboard.writeText(qs[i].sql).then(()=>{
+    const b=document.getElementById('uq'+uid+'_'+i);
+    b.classList.add('ok');b.innerHTML='✅ تم!';tst('✅ تم نسخ الكويري');
+    setTimeout(()=>{b.classList.remove('ok');b.innerHTML='📋 نسخ'},1500);
+  });
+}
+
+function edUQ(uid,i){
+  const qs=loadUserQs(uid);
+  const q=qs[i];
+  document.getElementById('mN').value=q.name;
+  document.getElementById('mT').value=q.tag||'';
+  document.getElementById('mD').value=q.desc||'';
+  document.getElementById('mS').value=q.sql;
+  document.getElementById('aM').dataset.e=i;
+  document.getElementById('aM').dataset.uid=uid;
+  document.getElementById('mTitle').textContent='✏️ تعديل الكويري';
+  document.getElementById('aM').classList.remove('hid');
+}
+
+function dlUQ(uid,i){
+  const qs=loadUserQs(uid);
+  if(confirm('حذف "'+qs[i].name+'"؟')){
+    qs.splice(i,1);
+    saveUserQs(uid,qs);
+    renderUserPage(uid);
+    tst('🗑️ تم الحذف');
+  }
+}
+
+// ═══ QUERIES (عامة) ═══
+const DQ=[
+{name:"Database",tag:"قاعدة البيانات",desc:"استعلام شامل لجميع المواقع مع الشركات والتصنيفات",sql:"SELECT\n    locations.*,\n    location_types.title AS location_type_name,\n    location_sub_types.name AS location_sub_type_name,\n    contracts.name AS package_name,\n    companies.name AS company_name,\n    housing_classifications.title AS housing_classification_name\nFROM locations\n\nLEFT JOIN location_types\n    ON locations.location_type_id = location_types.id\n\nLEFT JOIN location_sub_types\n    ON locations.location_sub_type_id = location_sub_types.id\n\nLEFT JOIN contracts\n    ON locations.contract_id = contracts.id\n\nLEFT JOIN location_company\n    ON locations.id = location_company.location_id\n\nLEFT JOIN companies\n    ON location_company.company_id = companies.id\n\nLEFT JOIN housing_classifications\n    ON locations.housing_classification_id = housing_classifications.id\n\nWHERE\n    (companies.id IS NULL OR companies.id != 133)\n    AND locations.deleted_at IS NULL;"},
+{name:"file_all_Locations_Bahusaeyn",tag:"تقرير المواقع",desc:"تقرير تفصيلي لجميع المواقع بأسماء الأعمدة العربية",sql:"SELECT\n    ROW_NUMBER() OVER (ORDER BY locations.id) AS 'م',\n    locations.pilgrims_type AS 'نوع الحجاج',\n    location_types.title AS 'نوع الموقع',\n    location_sub_types.name AS 'الموقع الفرعي',\n    companies.name AS 'اسم الشركة الرئيسية',\n    contracts.name AS 'الباقة',\n    locations.contract_no AS 'رقم العقد',\n    locations.license_no AS 'رقم التصريح',\n    locations.camp_eng_number AS 'الرقم الهندسي',\n    locations.pilgrims_nationality AS 'جنسية الحجاج'\nFROM locations\nLEFT JOIN location_types ON locations.location_type_id = location_types.id\nLEFT JOIN location_sub_types ON locations.location_sub_type_id = location_sub_types.id\nLEFT JOIN contracts ON locations.contract_id = contracts.id\nLEFT JOIN location_company ON locations.id = location_company.location_id\nLEFT JOIN companies ON location_company.company_id = companies.id\nLEFT JOIN housing_classifications ON locations.housing_classification_id = housing_classifications.id\nWHERE (companies.id IS NULL OR companies.id != 133) AND locations.deleted_at IS NULL;"},
+{name:"New_Camps_and_Housing",tag:"المخيمات والمساكن الجديدة",desc:"استعلام تصدير المخيمات والمساكن الجديدة للمقارنة",sql:"SELECT\n    locations.internal_location_id AS 'internal_id',\n    location_types.title AS 'file_type',\n    location_sub_types.name AS 'location_type',\n    companies.name AS 'parent_company_name',\n    locations.camp_eng_number AS 'camp_eng_number',\n    locations.pilgrims_nationality AS 'pilgrims_nationality',\n    locations.license_no AS 'license_no'\nFROM locations\nLEFT JOIN location_types ON locations.location_type_id = location_types.id\nLEFT JOIN location_sub_types ON locations.location_sub_type_id = location_sub_types.id\nLEFT JOIN contracts ON locations.contract_id = contracts.id\nLEFT JOIN location_company ON locations.id = location_company.location_id\nLEFT JOIN companies ON location_company.company_id = companies.id\nWHERE locations.deleted_at IS NULL;"}
+];
+let qs=JSON.parse(localStorage.getItem('imq')||'null')||[...DQ];
+function svQ(){localStorage.setItem('imq',JSON.stringify(qs));document.getElementById('qBg').textContent=qs.length}
+
+// modal context: uid=null => عامة, uid=string => مستخدم
+let mCtx={uid:null};
+function openM(uid){
+  mCtx={uid:uid||null};
+  document.getElementById('mTitle').textContent= uid ? '➕ إضافة كويري' : '➕ إضافة كويري';
+  ['mN','mT','mD','mS'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('aM').dataset.e='';
+  document.getElementById('aM').dataset.uid=uid||'';
+  document.getElementById('aM').classList.remove('hid');
+}
+function closeM(){document.getElementById('aM').classList.add('hid')}
+
+function edQ(i){
+  document.getElementById('mN').value=qs[i].name;
+  document.getElementById('mT').value=qs[i].tag;
+  document.getElementById('mD').value=qs[i].desc;
+  document.getElementById('mS').value=qs[i].sql;
+  document.getElementById('aM').dataset.e=i;
+  document.getElementById('aM').dataset.uid='';
+  document.getElementById('mTitle').textContent='✏️ تعديل الكويري';
+  document.getElementById('aM').classList.remove('hid');
+}
+
+function saveQ(){
+  const n=document.getElementById('mN').value.trim();
+  const s=document.getElementById('mS').value.trim();
+  if(!n||!s){tst('⚠️ الاسم والكود مطلوبة');return}
+  const o={name:n,tag:document.getElementById('mT').value.trim()||'SQL',desc:document.getElementById('mD').value.trim(),sql:s};
+  const uid=document.getElementById('aM').dataset.uid;
+  const e=document.getElementById('aM').dataset.e;
+  if(uid){
+    // user query
+    const uqs=loadUserQs(uid);
+    if(e!==''){uqs[parseInt(e)]=o;tst('✅ تم التحديث')}else{uqs.push(o);tst('✅ تمت الإضافة')}
+    saveUserQs(uid,uqs);
+    renderUserPage(uid);
+  } else {
+    // global query
+    if(e!==''){qs[parseInt(e)]=o;tst('✅ تم التحديث')}else{qs.push(o);tst('✅ تمت الإضافة')}
+    svQ();rndQ();
+  }
+  closeM();
+}
+
+function dlQ(i){if(confirm('حذف "'+qs[i].name+'"؟')){qs.splice(i,1);svQ();rndQ();tst('🗑️ تم الحذف')}}
+
+function hlS(sql){let s=esc(sql);['SELECT','FROM','LEFT JOIN','JOIN','INNER JOIN','RIGHT JOIN','ON','WHERE','AND','OR','AS','IS','NULL','NOT','IN','LIKE','BETWEEN','ORDER BY','GROUP BY','HAVING','LIMIT','CONCAT','ROW_NUMBER','OVER','COUNT','SUM','AVG','MAX','MIN','DISTINCT','CASE','WHEN','THEN','ELSE','END'].forEach(k=>{s=s.replace(new RegExp('\\b('+k.replace(/ /g,'\\s+')+')\\b','gi'),'<span style="color:var(--ckw);font-weight:600">$1</span>')});s=s.replace(/&#39;([^&#]*?)&#39;/g,'<span style="color:var(--cstr)">\'$1\'</span>');s=s.replace(/(\w+)\.(\w+)/g,'<span style="color:var(--cfn)">$1</span>.<span style="color:var(--ct)">$2</span>');s=s.replace(/(--.*)/g,'<span style="color:var(--ccm)">$1</span>');s=s.replace(/\b(\d+)\b/g,'<span style="color:var(--cnum)">$1</span>');return s}
+
+function rndQ(f=''){const g=document.getElementById('qG');const fl=qs.filter(q=>!f||q.name.toLowerCase().includes(f.toLowerCase())||q.tag.includes(f)||q.desc.includes(f)||q.sql.toLowerCase().includes(f.toLowerCase()));
+if(!fl.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--t2)">لا توجد نتائج</div>';return}
+g.innerHTML=fl.map((q,i)=>{const ri=qs.indexOf(q);const cu=ri>=DQ.length;return`<div class="qc fi" style="animation-delay:${i*.05}s"><div class="qh"><div class="qt"><h3>${esc(q.name)}</h3><span class="qtg">${esc(q.tag||'SQL')}</span>${cu?'<span class="qtg" style="background:rgba(16,167,96,.08);color:var(--grn)">مضاف</span>':''}</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="cq${ri}" onclick="cqF(${ri})">📋 نسخ</button>${cu?`<button class="btn" onclick="edQ(${ri})">✏️ تعديل</button><button class="btn dg" onclick="dlQ(${ri})">🗑️</button>`:''}</div></div><div class="qcd"><pre>${hlS(q.sql)}</pre></div><div class="qds">💡 ${esc(q.desc||'—')}</div></div>`}).join('')}
+function fltQ(v){rndQ(v)}
+function cqF(i){navigator.clipboard.writeText(qs[i].sql).then(()=>{const b=document.getElementById('cq'+i);b.classList.add('ok');b.innerHTML='✅ تم!';tst('✅ تم نسخ الكويري');setTimeout(()=>{b.classList.remove('ok');b.innerHTML='📋 نسخ'},1500)})}
+
+// ═══ CODE VIEWER ═══
+const CB=[
+{title:"كود مقارنة المخيمات",lang:"Python",code:"from google.colab import files\nimport io\n\nprint(\"ارفع ملف الوزارة\")\nuploaded_wiz = files.upload()\nprint(\"ارفع ملف النظام\")\nuploaded_sys = files.upload()\n\nwiz_file = io.BytesIO(list(uploaded_wiz.values())[0])\nsys_file  = io.BytesIO(list(uploaded_sys.values())[0])\n\nimport pandas as pd\nfrom openpyxl import Workbook\nfrom openpyxl.styles import Font, PatternFill, Alignment\n\ndf_wiz = pd.read_excel(wiz_file, dtype=str)\ndf_sys = pd.read_excel(sys_file, dtype=str)\ndf_wiz.columns = df_wiz.columns.str.strip()\ndf_sys.columns = df_sys.columns.str.strip()\n\nfor df in [df_wiz, df_sys]:\n    df['camp_eng_number']      = df['camp_eng_number'].fillna('').str.strip()\n    df['pilgrims_nationality'] = df['pilgrims_nationality'].fillna('').str.strip()\n    df['location_type']        = df['location_type'].fillna('').str.strip()\n    df['parent_company_name']  = df['parent_company_name'].fillna('').str.strip()\n\ndf_wiz = df_wiz[df_wiz['camp_eng_number'] != '']\ndf_sys = df_sys[df_sys['camp_eng_number'] != '']\n\nKEY = ['camp_eng_number', 'pilgrims_nationality', 'location_type', 'parent_company_name']\nwiz_keys = set(zip(*[df_wiz[c] for c in KEY]))\nsys_keys = set(zip(*[df_sys[c] for c in KEY]))\n\nnew_in_wiz = df_wiz[df_wiz.apply(lambda r: tuple(r[c] for c in KEY) in (wiz_keys - sys_keys), axis=1)].copy()\nnew_in_sys = df_sys[df_sys.apply(lambda r: tuple(r[c] for c in KEY) in (sys_keys - wiz_keys), axis=1)].copy()\n\nwb = Workbook()\nif 'Sheet' in wb.sheetnames: del wb['Sheet']\nwb.save('مقارنة_المخيمات.xlsx')\nfiles.download('مقارنة_المخيمات.xlsx')"},
+{title:"كود مقارنة المساكن",lang:"Python",code:"from google.colab import files\nimport io\n\nprint(\"ارفع ملف الوزارة (المساكن)\")\nuploaded_wiz = files.upload()\nprint(\"ارفع ملف النظام\")\nuploaded_sys = files.upload()\n\nwiz_file = io.BytesIO(list(uploaded_wiz.values())[0])\nsys_file  = io.BytesIO(list(uploaded_sys.values())[0])\n\nimport pandas as pd\nfrom openpyxl import Workbook\nfrom openpyxl.styles import Font, PatternFill, Alignment\n\ndf_wiz = pd.read_excel(wiz_file, dtype=str, engine='openpyxl')\ndf_sys = pd.read_excel(sys_file, dtype=str, engine='openpyxl')\ndf_wiz.columns = df_wiz.columns.str.strip()\ndf_sys.columns = df_sys.columns.str.strip()\n\ndf_sys = df_sys[df_sys['file_type'] == 'مسكن']\n\nKEY = ['parent_company_name', 'license_no', 'pilgrims_nationality']\nfor df in [df_wiz, df_sys]:\n    for c in KEY:\n        df[c] = df[c].fillna('').str.strip()\n\nwiz_keys = set(zip(*[df_wiz[c] for c in KEY]))\nsys_keys = set(zip(*[df_sys[c] for c in KEY]))\n\nnew_in_wiz = df_wiz[df_wiz.apply(lambda r: tuple(r[c] for c in KEY) in (wiz_keys - sys_keys), axis=1)].copy().reset_index(drop=True)\nnew_in_sys = df_sys[df_sys.apply(lambda r: tuple(r[c] for c in KEY) in (sys_keys - wiz_keys), axis=1)].copy()\n\nwb = Workbook()\nif 'Sheet' in wb.sheetnames: del wb['Sheet']\nwb.save('مقارنة_المساكن.xlsx')\nfiles.download('مقارنة_المساكن.xlsx')"}
+];
+CB.forEach(b=>b.lines=b.code.split('\n').length);
+let cvI=0;
+function cvS(i){cvI=i;document.getElementById('ct0').classList.toggle('on',i===0);document.getElementById('ct1').classList.toggle('on',i===1);const b=CB[i];
+document.getElementById('cvC').innerHTML=`<div class="cvc fi"><div class="cvh"><h3>${b.title} <span class="cvlg">${b.lang}</span></h3><button class="btn" id="cvCp" onclick="cvCp()">📋 نسخ الكود</button></div><div class="cvbd"><pre>${hlP(b.code)}</pre></div><div class="cvi"><span>📄 ${b.lines} سطر</span><span>🐍 ${b.lang}</span></div></div>`}
+function cvCp(){navigator.clipboard.writeText(CB[cvI].code).then(()=>{const b=document.getElementById('cvCp');b.classList.add('ok');b.innerHTML='✅ تم!';tst('✅ تم نسخ الكود');setTimeout(()=>{b.classList.remove('ok');b.innerHTML='📋 نسخ الكود'},1500)})}
+function hlP(c){let s=esc(c);['import','from','as','def','class','return','if','elif','else','for','in','while','with','try','except','finally','raise','lambda','not','and','or','is','True','False','None','print','set','list','dict','len','range','enumerate','zip','sorted'].forEach(k=>{s=s.replace(new RegExp('\\b('+k+')\\b','g'),'<span style="color:var(--ckw);font-weight:600">$1</span>')});s=s.replace(/(&#39;[^&#]*?&#39;|&quot;[^&]*?&quot;)/g,'<span style="color:var(--cstr)">$1</span>');s=s.replace(/(#[^\n]*)/g,'<span style="color:var(--ccm)">$1</span>');s=s.replace(/\b(\d+)\b/g,'<span style="color:var(--cnum)">$1</span>');s=s.replace(/(\w+)\(/g,'<span style="color:var(--cfn)">$1</span>(');return s}
+
+// ═══ COMPARISON ═══
+const cS={mode:null,wD:null,sD:null,result:null,tab:'summary'};const CL=['#1e55a0','#0891b2','#6c3cc7','#db2777','#d96a0c','#10a760','#d97706','#6366f1','#14b8a6','#c9283e'];
+function cR(){Object.assign(cS,{mode:null,wD:null,sD:null,result:null,tab:'summary'});document.getElementById('crB').classList.add('hid');cRM()}
+function cRM(){document.getElementById('cB').innerHTML=`<div class="fi" style="text-align:center;margin:12px 0 22px"><h2 style="font-size:19px;font-weight:800">اختر نوع المقارنة</h2></div><div class="cmcs"><div class="cmc camps" onclick="cSM('camps')"><div class="ico">⛺</div><h3>المخيمات</h3><p>رقم هندسي، جنسية، نوع موقع، شركة</p></div><div class="cmc housing" onclick="cSM('housing')"><div class="ico">🏢</div><h3>المساكن</h3><p>اسم شركة، رقم رخصة، جنسية</p></div></div>`}
+function cSM(m){cS.mode=m;const l=m==='camps'?'المخيمات':'المساكن';const cl=m==='camps'?'var(--ac)':'var(--ac2)';
+document.getElementById('cB').innerHTML=`<div class="fi" style="text-align:center;margin:8px 0 18px"><span style="display:inline-flex;align-items:center;gap:7px;padding:4px 15px;border-radius:14px;font-size:12.5px;font-weight:700;background:${cl}12;color:${cl}">${m==='camps'?'⛺':'🏢'} مقارنة ${l}</span><h2 style="font-size:18px;font-weight:800;margin-top:10px">ارفع الملفات</h2></div>
+<div style="display:flex;gap:14px;flex-wrap:wrap;margin:16px 0"><div class="cmd" id="dW" onclick="document.getElementById('fW').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="cDr(event,'w')"><input type="file" id="fW" accept=".xlsx,.xls,.csv" style="display:none" onchange="cFl(this,'w')"><div class="ico">📤</div><h4>ملف الوزارة</h4><p id="nW">اسحب أو اضغط</p></div>
+<div class="cmd" id="dS" onclick="document.getElementById('fS').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="cDr(event,'s')"><input type="file" id="fS" accept=".xlsx,.xls,.csv" style="display:none" onchange="cFl(this,'s')"><div class="ico">📤</div><h4>ملف النظام</h4><p id="nS">اسحب أو اضغط</p></div></div>
+<div id="cFI" class="hid" style="background:var(--card);border-radius:9px;padding:9px 16px;border:1px solid var(--bd);font-size:12px;color:var(--t2);margin-bottom:12px;display:flex;gap:18px"><span>الوزارة: <strong id="cWC">0</strong></span><span>النظام: <strong id="cSC">0</strong></span></div>
+<div style="display:flex;gap:10px"><button class="btn big" onclick="cR()">رجوع</button><button class="btn big pri" style="flex:1" id="cRB" disabled onclick="cRun()">ابدأ المقارنة</button></div>`}
+function cDr(e,t){e.preventDefault();e.currentTarget.classList.remove('drag');if(e.dataTransfer?.files?.[0])cPr(e.dataTransfer.files[0],t)}
+function cFl(inp,t){if(inp.files[0])cPr(inp.files[0],t)}
+async function cPr(file,t){try{const data=await pXL(file);if(t==='w')cS.wD=data;else cS.sD=data;document.getElementById(t==='w'?'dW':'dS').classList.add('done');const n=document.getElementById(t==='w'?'nW':'nS');n.textContent=file.name;n.style.color='var(--grn)';if(cS.wD&&cS.sD){document.getElementById('cWC').textContent=cS.wD.length;document.getElementById('cSC').textContent=cS.sD.length;document.getElementById('cFI').classList.remove('hid');document.getElementById('cFI').style.display='flex';document.getElementById('cRB').disabled=false}}catch(e){tst('⚠️ '+e.message)}}
+function pXL(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});res(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}).map(r=>{const o={};for(const k in r)o[k.trim()]=String(r[k]??'').trim();return o}))}catch(e){rej(e)}};r.onerror=rej;r.readAsArrayBuffer(f)})}
+function cRun(){if(!cS.wD||!cS.sD)return;document.getElementById('lO').classList.remove('hid');setTimeout(()=>{try{const mk=(r,K)=>K.map(k=>r[k]).join('|||');let r;
+if(cS.mode==='camps'){const K=['camp_eng_number','pilgrims_nationality','location_type','parent_company_name'];const cl=d=>d.filter(r=>r.camp_eng_number).map(r=>{K.forEach(k=>r[k]=(r[k]||'').trim());return r});const w=cl(cS.wD.map(r=>({...r}))),s=cl(cS.sD.map(r=>({...r})));const wK=new Set(w.map(x=>mk(x,K))),sK=new Set(s.map(x=>mk(x,K)));r={newInWiz:w.filter(x=>!sK.has(mk(x,K))),newInSys:s.filter(x=>!wK.has(mk(x,K))),common:w.filter(x=>sK.has(mk(x,K))),wizTotal:w.length,sysTotal:s.length}}
+else{const sF=cS.sD.map(r=>({...r})).filter(r=>r.file_type==='مسكن');const K=['parent_company_name','license_no','pilgrims_nationality'];const cl=d=>d.map(r=>{K.forEach(k=>r[k]=(r[k]||'').trim());return r});const w=cl(cS.wD.map(r=>({...r}))),s=cl(sF);const wK=new Set(w.map(x=>mk(x,K))),sK=new Set(s.map(x=>mk(x,K)));const niw=w.filter(x=>!sK.has(mk(x,K)));const sIds=new Set(s.map(r=>parseInt(r.internal_id)).filter(Boolean));let cur=65083;niw.forEach(r=>{while(sIds.has(cur))cur++;r.internal_id=String(cur);cur++});r={newInWiz:niw,newInSys:s.filter(x=>!wK.has(mk(x,K))),common:w.filter(x=>sK.has(mk(x,K))),wizTotal:w.length,sysTotal:s.length}}
+const sm={};r.newInWiz.forEach(x=>{const c=x.parent_company_name||'غير محدد';if(!sm[c])sm[c]={name:c,count:0,nats:new Set()};sm[c].count++;if(x.pilgrims_nationality)sm[c].nats.add(x.pilgrims_nationality)});r.summaryArr=Object.values(sm).map(s=>({...s,nationalities:[...s.nats].sort().join(' | ')})).sort((a,b)=>b.count-a.count);
+cS.result=r;cS.tab='summary';document.getElementById('lO').classList.add('hid');document.getElementById('crB').classList.remove('hid');cRR()}catch(e){document.getElementById('lO').classList.add('hid');tst('⚠️ '+e.message)}},250)}
+function cRR(){const r=cS.result,b=document.getElementById('cB');const st=(ic,lb,v,cl,sub)=>`<div class="cmst" style="border-right-color:${cl}"><div style="font-size:18px;width:40px;height:40px;border-radius:10px;background:${cl}12;display:flex;align-items:center;justify-content:center">${ic}</div><div><div class="sv">${v.toLocaleString()}</div><div class="sl">${lb}</div>${sub?`<div style="font-size:10px;color:${cl};margin-top:1px">${sub}</div>`:''}</div></div>`;
+b.innerHTML=`<div class="fi"><div class="cms">${st('📋','إجمالي الوزارة',r.wizTotal,'var(--ac)')}${st('📋','إجمالي النظام',r.sysTotal,'var(--ac2)')}${st('✅','مشترك',r.common.length,'var(--grn)')}${st('⚠️','جديد في الوزارة',r.newInWiz.length,'var(--org)',r.summaryArr.length+' شركة')}${st('ℹ️','نظام فقط',r.newInSys.length,'var(--red)')}</div><div class="cmtb" id="cTb"></div><div class="cmpn" id="cPn"></div><button class="btn big gp" style="margin:16px auto 0;display:flex" onclick="cEx()">📥 تحميل Excel</button></div>`;cRT();cRP()}
+function cRT(){const r=cS.result;document.getElementById('cTb').innerHTML=[{k:'summary',l:'📊 الملخص'},{k:'nw',l:`📤 جديد (${r.newInWiz.length})`},{k:'ns',l:`📋 نظام (${r.newInSys.length})`},{k:'co',l:'🏢 شركات'}].map(t=>`<button class="cmtbb ${cS.tab===t.k?'on':''}" onclick="cS.tab='${t.k}';cRT();cRP()">${t.l}</button>`).join('')}
+function cRP(){const p=document.getElementById('cPn'),r=cS.result;
+if(cS.tab==='summary'){p.innerHTML=`<div class="cmch"><div><h3>توزيع السجلات</h3><canvas id="cPi"></canvas></div>${r.summaryArr.length?'<div style="flex:2"><h3>أكثر الشركات</h3><canvas id="cBr"></canvas></div>':''}</div>`;if(r.summaryArr.length)p.innerHTML+='<div class="cmtw"><table><thead><tr><th>الشركة</th><th style="text-align:center">العدد</th><th>الجنسيات</th></tr></thead><tbody>'+r.summaryArr.map(s=>`<tr><td style="font-weight:600">${esc(s.name)}</td><td style="text-align:center;font-weight:800;color:var(--ac)">${s.count}</td><td style="font-size:10.5px;color:var(--t2)">${esc(s.nationalities)}</td></tr>`).join('')+'</tbody></table></div>';cCh()}
+else if(cS.tab==='nw'){p.innerHTML=cTbl(r.newInWiz,'جديد في الوزارة')}
+else if(cS.tab==='ns'){p.innerHTML=cTbl(r.newInSys,'في النظام فقط')}
+else if(cS.tab==='co'){p.innerHTML=r.summaryArr.length?r.summaryArr.map((s,i)=>`<div class="cmco"><div><div style="font-weight:700;font-size:13px">${esc(s.name)}</div><div style="font-size:11px;color:var(--t2);margin-top:2px">${esc(s.nationalities)}</div></div><div style="padding:4px 15px;border-radius:16px;font-weight:800;font-size:14px;background:${CL[i%CL.length]}12;color:${CL[i%CL.length]}">${s.count}</div></div>`).join(''):'<div style="text-align:center;padding:36px;color:var(--t2)">لا توجد</div>'}}
+function cCh(){const r=cS.result,pc=document.getElementById('cPi');if(pc){const d=[{l:'مشترك',v:r.common.length,c:'#10a760'},{l:'جديد الوزارة',v:r.newInWiz.length,c:'#3b72d9'},{l:'نظام فقط',v:r.newInSys.length,c:'#e07a18'}].filter(x=>x.v>0);new Chart(pc,{type:'doughnut',data:{labels:d.map(x=>x.l),datasets:[{data:d.map(x=>x.v),backgroundColor:d.map(x=>x.c),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Noto Sans Arabic',size:10.5},padding:12}}},cutout:'55%'}})}
+const bc=document.getElementById('cBr');if(bc&&r.summaryArr.length){const t=r.summaryArr.slice(0,10);new Chart(bc,{type:'bar',data:{labels:t.map(s=>s.name.length>18?s.name.slice(0,18)+'…':s.name),datasets:[{data:t.map(s=>s.count),backgroundColor:t.map((_,i)=>CL[i%CL.length]),borderRadius:4,barThickness:18}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#f0f0f0'},ticks:{font:{family:'Noto Sans Arabic',size:10}}},y:{ticks:{font:{family:'Noto Sans Arabic',size:10}}}}}})}}
+function cTbl(data,title){if(!data.length)return'<div style="text-align:center;padding:36px;color:var(--t2)">✅ لا توجد</div>';const cols=Object.keys(data[0]),sh=data.slice(0,80);let h=`<div style="font-size:13px;font-weight:700;margin-bottom:8px">${esc(title)} (${data.length})</div><div class="cmtw"><table><thead><tr>`;cols.forEach(c=>h+=`<th>${esc(c)}</th>`);h+='</tr></thead><tbody>';sh.forEach(r=>{h+='<tr>';cols.forEach(c=>h+=`<td>${esc(r[c]||'')}</td>`);h+='</tr>'});h+='</tbody></table></div>';if(data.length>80)h+=`<div style="text-align:center;padding:8px;font-size:11px;color:var(--t2)">عرض 80 من ${data.length}</div>`;return h}
+function cEx(){if(!cS.result)return;const wb=XLSX.utils.book_new(),r=cS.result,l=cS.mode==='camps'?'مخيمات':'مساكن';if(r.newInWiz.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(r.newInWiz),l+' جديدة');if(r.newInSys.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(r.newInSys),l+' نظام فقط');if(r.summaryArr.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(r.summaryArr.map(s=>({'الشركة':s.name,'العدد':s.count,'الجنسيات':s.nationalities}))),'ملخص');XLSX.writeFile(wb,'مقارنة_'+l+'.xlsx');tst('📥 تم')}
+
+// INIT
+rndQ();svQ();cvS(0);renderUsersNav();
+</script>
+</body>
+</html>
